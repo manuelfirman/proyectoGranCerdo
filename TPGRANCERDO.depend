@@ -1,0 +1,29 @@
+# depslib dependency file v1.0
+1655924214 source:c:\users\bezpa\desktop\tp defi\tpgrancerdo\main.cpp
+	<iostream>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	"rlutil.h"
+	"interfaz.h"
+	"game.h"
+
+1654797167 c:\users\bezpa\desktop\tp defi\tpgrancerdo\rlutil.h
+	<iostream>
+	<string>
+	<cstdio>
+	<stdio.h>
+	<string.h>
+	<windows.h>
+	<conio.h>
+	<termios.h>
+	<unistd.h>
+	<sys/ioctl.h>
+	<sys/types.h>
+	<sys/time.h>
+
+1655933119 c:\users\bezpa\desktop\tp defi\tpgrancerdo\interfaz.h
+	<stdio.h>
+
+1655933609 c:\users\bezpa\desktop\tp defi\tpgrancerdo\game.h
+
