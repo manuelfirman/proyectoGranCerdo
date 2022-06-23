@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1655924214 source:c:\users\bezpa\desktop\tp defi\tpgrancerdo\main.cpp
+1655944791 source:c:\users\bezpa\desktop\tp defi\tpgrancerdo\main.cpp
 	<iostream>
 	<stdlib.h>
 	<windows.h>
@@ -7,6 +7,7 @@
 	"rlutil.h"
 	"interfaz.h"
 	"game.h"
+	"cerditos.h"
 
 1654797167 c:\users\bezpa\desktop\tp defi\tpgrancerdo\rlutil.h
 	<iostream>
@@ -22,8 +23,10 @@
 	<sys/types.h>
 	<sys/time.h>
 
-1655933119 c:\users\bezpa\desktop\tp defi\tpgrancerdo\interfaz.h
+1655947065 c:\users\bezpa\desktop\tp defi\tpgrancerdo\interfaz.h
 	<stdio.h>
 
-1655933609 c:\users\bezpa\desktop\tp defi\tpgrancerdo\game.h
+1655944927 c:\users\bezpa\desktop\tp defi\tpgrancerdo\game.h
+
+1655937885 c:\users\bezpa\desktop\tp defi\tpgrancerdo\cerditos.h
 

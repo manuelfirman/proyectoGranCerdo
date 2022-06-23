@@ -38,36 +38,6 @@ void cualquierTecla(){
     rlutil::anykey();
 }
 
-void ffTablaAlFinalizar(int matrizTablaResultados[5][4], char jugador1[15], char jugador2[15], char ganador[15], bool tie, int maxPDV){
-    char oink[] = "OINK", inOink[4] = {};
-    std::cout<<"\n\tGRAN CERDO\n";
-    std::cout<<"\t-----------------------------------------------------------------------------";
-    std::cout<<"\n\t"<< "HITO" <<"\t\t\t" << jugador1<<"\t\t\t\t"<< jugador2;
-    std::cout<<"\n\t-----------------------------------------------------------------------------";
-    std::cout<<"\n\t"<< "Mas trufas en total\t" << matrizTablaResultados[0][0] << " PDV " << "(" << matrizTablaResultados[0][1] << " trufas)\t\t" << matrizTablaResultados[0][2] << " PDV " << "(" << matrizTablaResultados[0][3] << " trufas)";
-    std::cout<<"\n\t"<< "Cada 50 trufas\t\t" << matrizTablaResultados[1][0] << " PDV " << "(" << matrizTablaResultados[1][1] << " trufas)\t\t" << matrizTablaResultados[1][2] << " PDV " << "(" << matrizTablaResultados[1][3] << " trufas)";
-    std::cout<<"\n\t"<< "Oinks\t\t\t" << matrizTablaResultados[2][0] << " PDV " << "(" << matrizTablaResultados[2][1] << " Oinks)\t\t\t" << matrizTablaResultados[2][2] << " PDV " << "(" << matrizTablaResultados[2][3] << " Oinks)";
-    std::cout<<"\n\t"<< "Cerdo Codicioso\t\t" << matrizTablaResultados[3][0] << " PDV " << "(" << matrizTablaResultados[3][1] << " lanzamientos)\t\t" << matrizTablaResultados[3][2] << " PDV " << "(" << matrizTablaResultados[3][3] << " lanzamientos)";
-    std::cout<<"\n\t-----------------------------------------------------------------------------";
-    std::cout<<"\n\t"<< "TOTAL\t\t\t" << matrizTablaResultados[4][0] << " PDV\t\t\t\t" << matrizTablaResultados[4][2] << " PDV";
-
-    if(!tie){
-        std::cout<<"\n\n\t"<< "GANADOR:" << ganador << " CON " << maxPDV << " PUNTOS DE VICTORIA";
-    } else {
-        std::cout << "\n\n\t" << "EMPATE CON " << maxPDV << " PUNTOS DE VICTORIA";
-    }
-
-    std::cout<<"\n\n\t"<< "Ingrese Oink para continuar: ";
-    std::cin.getline(inOink, 4, '\n');
-    strupr(inOink);
-
-    while(strcmp(inOink, oink) == 0){
-        std::cout<<"\n\n\t"<< "Ingrese Oink para continuar: ";
-        std::cin.getline(inOink, 4, '\n');
-        strupr(inOink);
-    }
-}
-
 /// IMPRIME EL BANNER
 void fBanner(){
     fondoRosado();
@@ -79,6 +49,58 @@ void fBanner(){
     std::cout << "                                                        " << std::endl;
     setConsolaOriginal();
 }
+
+/// FUNCION FIN DE JUEGO
+void ffFinJuego(int matrizTablaResultados[5][4], char jugador1[15], char jugador2[15], char ganador[15], bool tie, int maxPDV){
+    char oink[] = "OINK", inOink[4] = {};
+    fBanner();
+
+    posicionarXY(20, 6);
+    std::cout << "-----------------------------------------------------------------------------------";
+    posicionarXY(20, 7);
+    std::cout << " HITO" <<"\t\t\t" << jugador1<< "\t\t\t\t" << jugador2;
+    posicionarXY(20, 8);
+    std::cout << "-----------------------------------------------------------------------------------";
+    posicionarXY(20, 9);
+    std::cout << " Mas trufas en total\t\t" << matrizTablaResultados[0][0] << " PDV " << "(" << matrizTablaResultados[0][1] << " trufas)\t\t" << matrizTablaResultados[0][2] << " PDV " << "(" << matrizTablaResultados[0][3] << " trufas)";
+    posicionarXY(20, 10);
+    std::cout << " Cada 50 trufas\t\t" << matrizTablaResultados[1][0] << " PDV " << "(" << matrizTablaResultados[1][1] << " trufas)\t\t" << matrizTablaResultados[1][2] << " PDV " << "(" << matrizTablaResultados[1][3] << " trufas)";
+    posicionarXY(20, 11);
+    std::cout << " Oinks\t\t\t" << matrizTablaResultados[2][0] << " PDV " << "(" << matrizTablaResultados[2][1] << " Oinks)\t\t\t" << matrizTablaResultados[2][2] << " PDV " << "(" << matrizTablaResultados[2][3] << " Oinks)";
+    posicionarXY(20, 12);
+    std::cout << " Cerdo Codicioso\t\t" << matrizTablaResultados[3][0] << " PDV " << "(" << matrizTablaResultados[3][1] << " lanzamientos)\t\t" << matrizTablaResultados[3][2] << " PDV " << "(" << matrizTablaResultados[3][3] << " lanzamientos)";
+    posicionarXY(20, 13);
+    std::cout << "-----------------------------------------------------------------------------------";
+    posicionarXY(20, 14);
+    std::cout << " TOTAL\t\t\t" << matrizTablaResultados[4][0] << " PDV\t\t\t\t" << matrizTablaResultados[4][2] << " PDV";
+    posicionarXY(20, 15);
+    std::cout << "-----------------------------------------------------------------------------------";
+
+
+    fondoRosado();
+    if(!tie){
+        posicionarXY(42, 18);
+        std::cout << "GANADOR: " << ganador << " CON " << maxPDV << " PUNTOS DE VICTORIA";
+    } else {
+        posicionarXY(45, 18);
+        std::cout << "EMPATE CON " << maxPDV << " PUNTOS DE VICTORIA";
+    }
+
+    setConsolaOriginal();
+    posicionarXY(22, 25);
+    std::cout << "Ingrese Oink para continuar: ";
+    std::cin.getline(inOink, 4, '\n');
+    strupr(inOink);
+    while(strcmp(inOink, oink) != 0){
+        inOink[4] = {};
+        std::cout<< "\n\n\t" << "Ingrese Oink para continuar: ";
+        std::cin.getline(inOink, 4, '\n');
+        strupr(inOink);
+    }
+    jugador1 = {};
+    jugador2 = {};
+}
+
 
 /// MUESTRA LOS NOMBRES DE LOS JUGADORES
 void fMostrarNombres(char jugador1[15], char jugador2[15]){
@@ -124,23 +146,40 @@ void fMostrarTrufas(int trufas1, int trufas2){
 /// FUNCION TABLA
 void ftablaRonda(bool turnoJugador, int trufasRonda, int i, char jugador1[15], char jugador2[15], int contLanzamiento){
     fondoBlanco();
-    posicionarXY(48, 5);
+    posicionarXY(49, 10);
     std::cout << "        RONDA #" << i+1 << "        ";
-    posicionarXY(48, 6);
-    std::cout << "TRUFAS DE LA RONDA: " << trufasRonda << "        ";
-    setConsolaOriginal();
-
+    posicionarXY(49, 13);
+    std::cout << " TRUFAS DE LA RONDA: " << trufasRonda << "  ";
     if(!turnoJugador){ // TURNO JUGADOR 1
-            posicionarXY(2, 7);
-            std::cout << "TURNO DE " << jugador1;
-            posicionarXY(48, 7);
-            std::cout << "JUGADOR " << jugador1 << " LANZAMIENTO #" << contLanzamiento << "        ";
-        } else {
-            posicionarXY(2, 7);
-            std::cout << "TURNO DE " << jugador2;
-            posicionarXY(48, 7);
-            std::cout << "JUGADOR " << jugador2 << " LANZAMIENTO #" << contLanzamiento << "        ";
-        }
+        setConsolaOriginal();
+        posicionarXY(49, 11);
+        std::cout << "    TURNO DE " << jugador1;
+        fondoBlanco();
+        posicionarXY(49, 12);
+        std::cout << "    LANZAMIENTOS #" << contLanzamiento << "     ";
+    } else {           // TURNO JUGADOR 2
+        setConsolaOriginal();
+        posicionarXY(49, 11);
+        std::cout << "    TURNO DE " << jugador2;
+        fondoBlanco();
+        posicionarXY(49, 12);
+        std::cout << "    LANZAMIENTOS #" << contLanzamiento << "     ";
+    }
+    fondoRosado();
+    posicionarXY(47,9);
+    std::cout << "                            ";
+    posicionarXY(47,10);    std::cout << "  ";
+    posicionarXY(47,11);    std::cout << "  ";
+    posicionarXY(47,12);    std::cout << "  ";
+    posicionarXY(47,13);
+    std::cout << "  ";
+    posicionarXY(73,10);    std::cout << "  ";
+    posicionarXY(73,11);    std::cout << "  ";
+    posicionarXY(73,12);    std::cout << "  ";
+    posicionarXY(73,13);    std::cout << "  ";
+    posicionarXY(47,14);
+    std::cout << "                            ";
+    setConsolaOriginal();
 }
 
 /// PIDE INGRESAR LOS NOMBRES DE LOS JUGADORES
@@ -149,9 +188,11 @@ void fPedirNombres(char jugador1[15], char jugador2[15]){
     posicionarXY(25,8);
     std::cout << "INGRESE EL NOMBRE DEL JUGADOR 1: ";
     std::cin.getline(jugador1, 15, '\n');
+    strupr(jugador1);
     posicionarXY(25,13);
     std::cout << "INGRESE EL NOMBRE DEL JUGADOR 2: ";
     std::cin.getline(jugador2, 15, '\n');
+    strupr(jugador2);
     setConsolaOriginal();
 }
 
@@ -220,31 +261,32 @@ void fprintDados(int inDado, int posX, int posY){
 
 /// ANIMACION DE DADOS
 void fAnimacion(int cerdoHundido){
-    posicionarXY(2, 9);
+    posicionarXY(57, 17);
     std::cout << "TIRANDO...";
     if(!cerdoHundido){
-        for(int i=0; i<7; i++){
+        for(int i=6; i>=0; i--){
             Sleep(300);
-            fprintDados(1+i, 50, 20);
-            fprintDados(1+i, 60, 20);
+            fprintDados(i, 52, 20);
+            fprintDados(i, 63, 20);
         }
     } else {
-        for(int i=0; i<7; i++){
+        for(int i=6; i>0; i--){
             Sleep(300);
-            fprintDados(1+i, 45, 20);
-            fprintDados(1+i, 55, 20);
-            fprintDados(1+i, 65, 20);
+            fprintDados(1+i, 48, 20);
+            fprintDados(1+i, 58, 20);
+            fprintDados(1+i, 68, 20);
         }
     }
-    limpiarConsola();
+    posicionarXY(57, 17);
+    std::cout << "          ";
 }
 
 /// IMPRIME 2 DADOS
 void fDosDados(int vectNumDados[3]){
     int acuPos = 0;
     for(int i=0; i<2; i++){
-        fprintDados(vectNumDados[i], 50+acuPos, 20);
-        acuPos += 10;
+        fprintDados(vectNumDados[i], 52+acuPos, 20);
+        acuPos += 11;
     }
 }
 
@@ -252,20 +294,23 @@ void fDosDados(int vectNumDados[3]){
 void fTresDados(int vectNumDados[3]){
     int acuPos = 0;
     for(int i=0; i<3; i++){
-        fprintDados(vectNumDados[i], 45+acuPos, 20);
+        fprintDados(vectNumDados[i], 48+acuPos, 20);
         acuPos += 10;
     }
 }
 
 /// OINK!
 void fPrintOink(){
-    posicionarXY(55, 18);
+    posicionarXY(56, 18);
     fondoRosado();
-    std::cout << "  OINK  " << std::endl;
+    std::cout << "   OINK   " << std::endl;
     setConsolaOriginal();
-    posicionarXY(7, 25);
+    posicionarXY(49, 25);
     std::cout << "TENES QUE VOLVER A LANZAR" << std::endl;
     cualquierTecla();
+    posicionarXY(49, 25);
+    std::cout << "                         " << std::endl;
+
 }
 
 /// MENU
@@ -284,27 +329,30 @@ void fMenuGranCerdo(){
 
 /// CERDO HUNDIDO
 void fHundirEnElBarro(bool dados){
+    fondoBlanco();
     if(dados){
-        posicionarXY(46, 10);
+        posicionarXY(46, 26);
         std::cout << "TE HAS HUNDIDO EN EL BARRO";
-        posicionarXY(45, 11);
+        posicionarXY(45, 27);
         std::cout << "ENTREGAS TUS TRUFAS AL RIVAL";
     } else {
-        posicionarXY(47, 10);
+        posicionarXY(47, 26);
         std::cout << "TE HAS HUNDIDO EN EL BARRO";
-        posicionarXY(50, 11);
+        posicionarXY(50, 27);
         std::cout << "PERDISTE TUS TRUFAS";
     }
-
-
+    setConsolaOriginal();
 }
 
 /// FIN DE TURNO (SUMA TRUFAS)
 void funcionFinTurno(bool turnoJugador, int trufasRonda, char jugador1[15], char jugador2[15]){
     if(!turnoJugador){
-        posicionarXY(2, 25);
+        posicionarXY(45, 25);
         fondoBlanco();
         std::cout << "EL JUGADOR " << jugador1 << " SUMA " << trufasRonda << " TRUFAS";
+        setConsolaOriginal();
+        posicionarXY(45, 27);
+        std::cout << "ES EL TURNO DEL JUGADOR:  " << jugador2;
 
     } else {
         posicionarXY(2, 25);
@@ -316,15 +364,18 @@ void funcionFinTurno(bool turnoJugador, int trufasRonda, char jugador1[15], char
 
 /// FUNCION PIERDE EL TURNO
 void fPierdeTurno(bool turnoJugador, char jugador1[15], char jugador2[15]){
+    fondoBlanco();
     if(!turnoJugador){
-        posicionarXY(45, 10);
+        posicionarXY(46, 25);
         std::cout << "JUGADOR " << jugador1 << " PIERDE EL TURNO";
-        posicionarXY(45, 11);
+        setConsolaOriginal();
+        posicionarXY(45, 27);
         std::cout << "ES EL TURNO DEL JUGADOR: " << jugador2;
     } else {
-        posicionarXY(45, 10);
+        posicionarXY(46, 25);
         std::cout << "JUGADOR " << jugador2 << " PIERDE EL TURNO";
-        posicionarXY(45, 11);
+        setConsolaOriginal();
+        posicionarXY(45, 27);
         std::cout << "ES EL TURNO DEL JUGADOR: " << jugador1;
     }
 }

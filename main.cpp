@@ -5,13 +5,13 @@
 #include "rlutil.h"
 #include "interfaz.h"
 #include "game.h"
+#include "cerditos.h"
 
 
 int main()
 {
     bool gameOver = false;
     int yCursor = 0; // posicion del cursor
-
     rlutil::hidecursor(); // ocultar cursor consola
 
     do{
@@ -47,10 +47,10 @@ int main()
                         limpiarConsola();
                     break;
                     case 1:
-//                        fEstadisticas();
+                        fEstadisticas();
                     break;
                     case 2:
-//                        fCerditos();
+                        fCerditos();
                     break;
                     case 3:
                         gameOver = true;
@@ -58,11 +58,7 @@ int main()
 
                 }
             break;
-            default:
-
-            break;
         }
-
     } while(!gameOver);
 
     return 0;
