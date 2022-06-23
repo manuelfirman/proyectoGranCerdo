@@ -12,6 +12,8 @@ int main()
 {
     bool gameOver = false;
     int yCursor = 0; // posicion del cursor
+    int record = 0;
+    char mejorPuntaje[15] = {};
     rlutil::hidecursor(); // ocultar cursor consola
 
     do{
@@ -43,11 +45,11 @@ int main()
             case 1: // Enter
                 switch(yCursor){
                     case 0:
-                        fGame();
+                        fGame(record, mejorPuntaje);
                         limpiarConsola();
                     break;
                     case 1:
-                        fEstadisticas();
+                        fEstadisticas(record, mejorPuntaje);
                     break;
                     case 2:
                         fCerditos();

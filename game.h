@@ -28,7 +28,7 @@ void ffHundir(bool turnoJugador, bool &hundirDosAses, bool &hundirTresAses, int 
 void ffTrufas50(int acuTrufas1, int acuTrufas2, bool &trufas50);
 void ffTest(char lanzar, int vectNumDados[]);
 
-void fGame(){
+void fGame(int &record, char mejorPuntaje[15]){
     int matrizTablaResultados[5][4] = {};
     int contOink1 = 0, contOink2 = 0;
     char lanzar;
@@ -37,7 +37,7 @@ void fGame(){
     int i, contLanzamiento = 0, rondaActual = 0;         // CONTADORES
     int maxLanzamientos1 = 0, maxLanzamientos2 = 0;
     int vectNumDados[3] = {};                            // VECTOR NUMERO DE DADOS
-    int trufasRonda = 0, acuTrufas1 = 50, acuTrufas2 = 50, maxPDV = 0; // ACUMULADORES
+    int trufasRonda = 0, acuTrufas1 = 0, acuTrufas2 = 0, maxPDV = 0; // ACUMULADORES
     bool hundirDosAses = false, hundirTresAses = false, cerdoHundido = false;
     bool corteAs = false, turnoJugador = false, cambioRonda = false;
     bool relanzamiento = false, tie = false;
@@ -50,7 +50,7 @@ void fGame(){
     fMostrarNombres(jugador1, jugador2);    // MOSTRAR NOMBRES
     fMostrarTrufas(acuTrufas1, acuTrufas2); // MOSTRAR TRUFAS
 
-    for(i=0; i<5; i++){
+    for(i=0; i<1; i++){
         limpiarConsola();
         cambioRonda = false;
 
@@ -64,7 +64,7 @@ void fGame(){
             if(lanzar == 'S'){                 /// LANZAR
                 contLanzamiento++;
                 vectNumDados[3] = ffNumeroRandom(vectNumDados); /// ASIGNA NUMERO A LOS DADOS
-                ffTest(lanzar, vectNumDados);
+//                ffTest(lanzar, vectNumDados);
                 fAnimacion(cerdoHundido, trufas50);
 
                 if(cerdoHundido || trufas50){ /// CON CUANTOS DADOS JUEGO?
@@ -147,7 +147,14 @@ void fGame(){
     ffTablaFilaTres(matrizTablaResultados, contOink1, contOink2);                                           // FILA 3
     ffTablaFilaCuatro(matrizTablaResultados, maxLanzamientos1, maxLanzamientos2);                           // FILA 4
     ffTotal(matrizTablaResultados, maxPDV, tie, jugador1, jugador2, ganador);                               // TOTAL
-    fFinJuego(matrizTablaResultados, jugador1, jugador2, ganador, tie, maxPDV);                            // TABLA
+    fFinJuego(matrizTablaResultados, jugador1, jugador2, ganador, tie, maxPDV);                             // TABLA
+
+    if(maxPDV > record){
+        record = maxPDV;
+        for(int j=0; j<15; j++){
+            mejorPuntaje[j] = ganador[j];
+        }
+    }
 }
 
 

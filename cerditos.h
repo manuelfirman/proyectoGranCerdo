@@ -6,7 +6,7 @@
 
 
 /// MEJORES PUNTAJES
-void fEstadisticas(){
+void fEstadisticas(int record, char mejorPuntaje[15]){
     rlutil::cls();
     rlutil::setBackgroundColor(rlutil::COLOR::LIGHTRED);
     rlutil::locate(50, 2);
@@ -17,11 +17,15 @@ void fEstadisticas(){
     std::cout << "                         " << std::endl;
 
     rlutil::setBackgroundColor(rlutil::COLOR::BLACK);
-    rlutil::locate(50, 9);
-    std::cout << "JOAQUI ..... 10000 pts" << std::endl;
-
-    rlutil::locate(50, 11);
-    std::cout << "MANOLE ..... 1500 pts" << std::endl;
+    rlutil::locate(56, 8);
+    std::cout << "MEJOR PUNTAJE" << std::endl;
+    if(strlen(mejorPuntaje)>0){
+        rlutil::locate(50, 11);
+        std::cout << mejorPuntaje << " ..... " << record << " PDV" << std::endl;
+    } else {
+        rlutil::locate(54, 11);
+        std::cout << "NADIE ..... " << record << " PDV" << std::endl;
+    }
     rlutil::anykey();
     rlutil::cls();
 }

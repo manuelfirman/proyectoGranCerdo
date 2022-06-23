@@ -52,8 +52,9 @@ void fBanner(){
 
 /// FUNCION FIN DE JUEGO
 void fFinJuego(int matrizTablaResultados[5][4], char jugador1[15], char jugador2[15], char ganador[15], bool tie, int maxPDV){
-    char inOink[4] = {}, oink[] = "OINK";
-    bool salir = true;
+    char inOink[4] = {}, oink[] = "oink";
+    bool salir = false;
+    int cont = 0;
     fBanner();
 
     posicionarXY(20, 6);
@@ -91,21 +92,13 @@ void fFinJuego(int matrizTablaResultados[5][4], char jugador1[15], char jugador2
     posicionarXY(22, 25);
     std::cout << "Ingrese Oink para continuar: ";
     std::cin.getline(inOink, 4, '\n');
-    strupr(inOink);
-    for(int j=0; j<4; j++){
-        if(inOink[j] != oink[j]){
-            salir = false;
-        }
-    }
     while(!salir){
-        inOink[4] = {};
-        std::cout << "Ingrese Oink para continuar: ";
-        std::cin.getline(inOink, 4, '\n');
-        strupr(inOink);
-        for(int j=0; j<4; j++){
-            if(inOink[j] != oink[j]){
-                salir = false;
-            }
+        if(strcasecmp(oink, inOink) == 0){
+            salir = true;
+        } else {
+            posicionarXY(22, 25);
+            std::cout << "Ingrese Oink para continuar: ";
+            std::cin.getline(inOink, 4, '\n');
         }
     }
 }
@@ -358,9 +351,11 @@ void funcionFinTurno(bool turnoJugador, int trufasRonda, char jugador1[15], char
         std::cout << "ES EL TURNO DEL JUGADOR:  " << jugador2;
 
     } else {
-        posicionarXY(2, 25);
+        posicionarXY(45, 25);
         fondoBlanco();
         std::cout << "EL JUGADOR " << jugador2 << " SUMA " << trufasRonda << " TRUFAS";
+        posicionarXY(45, 27);
+        std::cout << "ES EL TURNO DEL JUGADOR:  " << jugador1;
     }
     setConsolaOriginal();
 }
