@@ -5,19 +5,17 @@
 
 #endif // GAME_H_INCLUDED
 
-int matrizTablaResultados[5][4] = {};
-bool ffCorteTurno(int vectNumDados[3], bool &corteAs, bool cerdoHundido);
-bool fCerdoHundido(int vectNumDados[3]);
 char ffSoN(bool &relanzamiento);
+bool ffCorteTurno(int vectNumDados[3], bool &corteAs, bool cerdoHundido, bool trufas50);
+bool fCerdoHundido(int vectNumDados[3]);
 int ffNumeroRandom(int vectNumDados[3]);
-int contOink1 = 0, contOink2 = 0;
 void ffCalculoDosDados(int &trufasRonda, int vectNumDados[3], bool &relanzamiento);
-void ffCalculoTresDados(int &trufasRonda, int vectNumDados[3]);
+void ffCalculoTresDados(int &trufasRonda, int vectNumDados[3], bool &relanzamiento);
 void ffContMaxLanz(int contLanzamiento, int &maxLanzamientos);
 void ffCambioTurno(bool &turnoJugador);
 void ffContadorOinks(bool turnoJugador, bool relanzamiento, int &contOink1, int &contOink2);
 void ffHundirDosAses(int vectNumDados[3], bool &hundirDosAses, bool &cerdoHundido);
-void ffHundirTresAses(int vectNumDados[3], bool &hundirTresAses);
+void ffHundirTresAses(int vectNumDados[3], bool &hundirTresAses, bool &hundirDosAses);
 void funcionFinTurno(bool turnoJugador, int trufasRonda, char jugador1[15], char jugador2[15]);
 void funcionLanzamiento(int contLanzamiento, int vectNumDados[3], int trufasRonda, bool cerdoHundido, int acuTrufas1, int acuTrufas2);
 void ffTablaFilaUno(int matrizTablaResultados[5][4], int acuTrufas1, int acuTrufas2, int &masTrufas, char jugador1[15], char jugador2[15], char ganador[15]);
@@ -25,21 +23,25 @@ void ffTablaFilaDos(int matrizTablaResultados[5][4], int acuTrufas1, int acuTruf
 void ffTablaFilaTres(int matrizTablaResultados[5][4], int contOink1, int contOink2);
 void ffTablaFilaCuatro(int matrizTablaResultados[5][4], int maxLanzamientos1, int maxLanzamientos2);
 void ffTotal(int matrizTablaResultados[5][4], int &maxPDV, bool &tie, char jugador1[15], char jugador2[15], char ganador[15]);
-//void fDelay(int segundos);
 void ffSinkTwo(bool turnoJugador, bool hundirDosAses, int &acuTrufas1, int &acuTrufas2);
-void ffHundir(bool turnoJugador, bool hundirDosAses, bool hundirTresAses, int &acuTrufas1, int &acuTrufas2, char jugador1[15], char jugador2[15]);
+void ffHundir(bool turnoJugador, bool &hundirDosAses, bool &hundirTresAses, int &acuTrufas1, int &acuTrufas2, char jugador1[15], char jugador2[15]);
+void ffTrufas50(int acuTrufas1, int acuTrufas2, bool &trufas50);
+void ffTest(char lanzar, int vectNumDados[]);
 
 void fGame(){
+    int matrizTablaResultados[5][4] = {};
+    int contOink1 = 0, contOink2 = 0;
     char lanzar;
     char jugador1[15] = {}, jugador2[15] = {}, ganador[15] = {}; // VECTOR NOMBRES
     int masTrufas = 0;
     int i, contLanzamiento = 0, rondaActual = 0;         // CONTADORES
     int maxLanzamientos1 = 0, maxLanzamientos2 = 0;
     int vectNumDados[3] = {};                            // VECTOR NUMERO DE DADOS
-    int trufasRonda = 0, acuTrufas1 = 0, acuTrufas2 = 0, maxPDV = 0; // ACUMULADORES
+    int trufasRonda = 0, acuTrufas1 = 50, acuTrufas2 = 50, maxPDV = 0; // ACUMULADORES
     bool hundirDosAses = false, hundirTresAses = false, cerdoHundido = false;
     bool corteAs = false, turnoJugador = false, cambioRonda = false;
     bool relanzamiento = false, tie = false;
+    bool trufas50 = false;
 
     limpiarConsola();
     fPedirNombres(jugador1, jugador2);      // PEDIR NOMBRES
@@ -48,7 +50,7 @@ void fGame(){
     fMostrarNombres(jugador1, jugador2);    // MOSTRAR NOMBRES
     fMostrarTrufas(acuTrufas1, acuTrufas2); // MOSTRAR TRUFAS
 
-    for(i=0; i<1; i++){
+    for(i=0; i<5; i++){
         limpiarConsola();
         cambioRonda = false;
 
@@ -62,12 +64,13 @@ void fGame(){
             if(lanzar == 'S'){                 /// LANZAR
                 contLanzamiento++;
                 vectNumDados[3] = ffNumeroRandom(vectNumDados); /// ASIGNA NUMERO A LOS DADOS
-                fAnimacion(cerdoHundido);
+                ffTest(lanzar, vectNumDados);
+                fAnimacion(cerdoHundido, trufas50);
 
-                if((cerdoHundido) || (acuTrufas1 > 50 && acuTrufas2 > 50)){ /// CON CUANTOS DADOS JUEGO?
+                if(cerdoHundido || trufas50){ /// CON CUANTOS DADOS JUEGO?
                     fTresDados(vectNumDados);
-                    ffCalculoTresDados(trufasRonda, vectNumDados);                // DOS DADOS
-                    ffHundirTresAses(vectNumDados, hundirTresAses);
+                    ffCalculoTresDados(trufasRonda, vectNumDados, relanzamiento);                // DOS DADOS
+                    ffHundirTresAses(vectNumDados, hundirTresAses, hundirDosAses);
                 } else {
                     fDosDados(vectNumDados);
                     ffCalculoDosDados(trufasRonda, vectNumDados, relanzamiento);  // TRES DADOS
@@ -75,24 +78,20 @@ void fGame(){
                 }
 
                 ffContadorOinks(turnoJugador, relanzamiento, contOink1, contOink2);     /// CUENTA OINKS
-                ffCorteTurno(vectNumDados, corteAs, cerdoHundido);                      /// CORTA TURNO
+                ffCorteTurno(vectNumDados, corteAs, cerdoHundido, trufas50);                      /// CORTA TURNO
 
                 if(corteAs){        /// SALIO UN AS?
                     if(!turnoJugador){ /// PIERDE EL TURNO EL JUGADOR 1?
                         ffContMaxLanz(contLanzamiento, maxLanzamientos1); // CONTAR MAX LANZAMIENTOS 1
-                        if(cerdoHundido){ /// HAY CERDO HUNDIDO?
+                        if(cerdoHundido || trufas50){ /// HAY CERDO HUNDIDO?
                             ffHundir(turnoJugador, hundirDosAses, hundirTresAses, acuTrufas1, acuTrufas2, jugador1, jugador2);
-//                            ffSinkThree(turnoJugador, hundirTresAses, acuTrufas1, acuTrufas2);
-//                            ffSinkTwo(turnoJugador, hundirDosAses, acuTrufas1, acuTrufas2);
                         } else {
                             fPierdeTurno(turnoJugador, jugador1, jugador2);
                         }
                     } else {           /// PIERDE EL TURNO EL JUGADOR 2?
                         ffContMaxLanz(contLanzamiento, maxLanzamientos2); // CONTAR MAX LANZAMIENTOS 2
-                        if(cerdoHundido){ /// HAY CERDO HUNDIDO?
+                        if(cerdoHundido || trufas50){ /// HAY CERDO HUNDIDO?
                             ffHundir(turnoJugador, hundirDosAses, hundirTresAses, acuTrufas1, acuTrufas2, jugador1, jugador2);
-//                            ffSinkThree(turnoJugador, hundirTresAses, acuTrufas1, acuTrufas2);  // HUNDIR TRES DADOS
-//                            ffSinkTwo(turnoJugador, hundirDosAses, acuTrufas1, acuTrufas2);     // HUNDIR DOS DADOS
                         } else {
                             fPierdeTurno(turnoJugador, jugador1, jugador2);                     // PERDER TURNO (UN AS)
                         }
@@ -108,10 +107,6 @@ void fGame(){
                     std::cout << "PULSA CUALQUIER TECLA PARA CONTINUAR";
                 }
                 cualquierTecla();
-                limpiarConsola();
-                fBanner();
-                fMostrarNombres(jugador1, jugador2);
-                fMostrarTrufas(acuTrufas1, acuTrufas2);
                 limpiarConsola();
 
             } else if(lanzar == 'N'){
@@ -129,16 +124,12 @@ void fGame(){
                     cambioRonda = true;
                     limpiarConsola();
                 }
-
                 ffCambioTurno(turnoJugador);
                 trufasRonda = 0;
                 contLanzamiento = 0;
                 setConsolaOriginal();
-            } else if(lanzar == 'T'){
-                vectNumDados[0] = 1;
-                vectNumDados[1] = 1;
-                vectNumDados[2] = 1;
             }
+            ffTrufas50(acuTrufas1, acuTrufas2, trufas50);
         }
 
         posicionarXY(55,4);
@@ -156,7 +147,34 @@ void fGame(){
     ffTablaFilaTres(matrizTablaResultados, contOink1, contOink2);                                           // FILA 3
     ffTablaFilaCuatro(matrizTablaResultados, maxLanzamientos1, maxLanzamientos2);                           // FILA 4
     ffTotal(matrizTablaResultados, maxPDV, tie, jugador1, jugador2, ganador);                               // TOTAL
-    ffFinJuego(matrizTablaResultados, jugador1, jugador2, ganador, tie, maxPDV);                            // TABLA
+    fFinJuego(matrizTablaResultados, jugador1, jugador2, ganador, tie, maxPDV);                            // TABLA
+}
+
+
+/// TEST
+void ffTest(char lanzar, int vectNumDados[]){
+lanzar = rlutil::getkey();
+    if (lanzar == 'T'){
+        vectNumDados[0] = 1;
+        vectNumDados[1] = 1;
+        vectNumDados[2] = 1;
+    } else if(lanzar == 'D'){
+        vectNumDados[0] = 1;
+        vectNumDados[1] = 2;
+        vectNumDados[2] = 1;
+    } else if(lanzar == 'F'){
+        vectNumDados[0] = 1;
+        vectNumDados[1] = 1;
+        vectNumDados[2] = 2;
+    } else if(lanzar == 'G'){
+        vectNumDados[0] = 2;
+        vectNumDados[1] = 1;
+        vectNumDados[2] = 1;
+    } else if(lanzar == 'Z'){
+        vectNumDados[0] = 2;
+        vectNumDados[1] = 3;
+        vectNumDados[2] = 2;
+    }
 }
 
 /// PRIMER FILA DE LA TABLA
@@ -237,41 +255,9 @@ void ffContMaxLanz(int contLanzamiento, int &maxLanzamientos){
     }
 }
 
-/// HUNDE CON DOS ASES
-void ffSinkTwo(bool turnoJugador, bool hundirDosAses, int &acuTrufas1, int &acuTrufas2){
-    if(hundirDosAses){
-        if(!turnoJugador){
-            acuTrufas1 = 0;
-        } else {
-            acuTrufas2 = 0;
-        }
-        fHundirEnElBarro(false);
-        hundirDosAses = false;
-    }
-}
-
-/// HUNDE CON TRES ASES
-void ffHundir(bool turnoJugador, bool hundirDosAses, bool hundirTresAses, int &acuTrufas1, int &acuTrufas2, char jugador1[15], char jugador2[15]){
-    if(hundirTresAses){ /// SALIERON 3 ASES?
-        if(!turnoJugador){
-            acuTrufas2 += acuTrufas1; // TRUFAS DEL 1 AL 2
-            acuTrufas1 = 0;
-        } else{
-            acuTrufas1 += acuTrufas2; // TRUFAS DEL 2 AL 1
-            acuTrufas2 = 0;
-        }
-        fHundirEnElBarro(true);
-        hundirTresAses = false;
-    } else if(hundirDosAses){ /// SALIERON 2 ASES?
-        if(!turnoJugador){
-            acuTrufas1 = 0;
-        } else {
-            acuTrufas2 = 0;
-        }
-        fHundirEnElBarro(false);
-        hundirDosAses = false;
-    } else {
-        fPierdeTurno(turnoJugador, jugador1, jugador2);
+void ffTrufas50(int acuTrufas1, int acuTrufas2, bool &trufas50){
+    if(acuTrufas1 > 49 && acuTrufas2 > 49){
+        trufas50 = true;
     }
 }
 
@@ -302,21 +288,46 @@ void ffCalculoDosDados(int &trufasRonda, int vectNumDados[3], bool &relanzamient
 }
 
 /// CALCULA LOS PUNTOS DE A TRES DADOS
-void ffCalculoTresDados(int &trufasRonda, int vectNumDados[3]){
+void ffCalculoTresDados(int &trufasRonda, int vectNumDados[3], bool &relanzamiento){
     if((vectNumDados[0]!=vectNumDados[1] && vectNumDados[1]!=vectNumDados[2] && vectNumDados[0]!=vectNumDados[2]) && (vectNumDados[0]!=1 && vectNumDados[1]!=1 && vectNumDados[2]!=1)){ /// CARAS DISTINTAS SIN AS
         trufasRonda += vectNumDados[0] + vectNumDados[1] + vectNumDados[2];
     } else if((vectNumDados[0]==vectNumDados[1] && vectNumDados[1]==vectNumDados[2]) && (vectNumDados[0]!=1 && vectNumDados[1]!=1 && vectNumDados[2]!=1)){ /// 3 CARAS IGUALES SIN ASES
+        relanzamiento = true;
         fPrintOink();
         trufasRonda += (vectNumDados[0]+vectNumDados[1]+vectNumDados[2]) * 2;
-    } else if((vectNumDados[0]==vectNumDados[1] || vectNumDados[1]==vectNumDados[2] || vectNumDados[2]==vectNumDados[1]) && (vectNumDados[0]!=1 && vectNumDados[1]!=1 && vectNumDados[2]!=1)){ /// 2 CARAS IGUALES SIN ASES
+    } else if((vectNumDados[0]==vectNumDados[1] || vectNumDados[1]==vectNumDados[2] || vectNumDados[0]==vectNumDados[2]) && (vectNumDados[0]!=1 && vectNumDados[1]!=1 && vectNumDados[2]!=1)){ /// 2 CARAS IGUALES SIN ASES
         trufasRonda += vectNumDados[0] + vectNumDados[1] + vectNumDados[2];
     } else if(vectNumDados[0]==1 && vectNumDados[1]==1 && vectNumDados[2]==1){ /// TRES ASES
-//        std::cout << "HUNDE EN EL BARRO" << std::endl;
-//        std::cout << "PUNTO PAL OTRO" << std::endl;
+        trufasRonda = 0;
     } else if((vectNumDados[0]==vectNumDados[1] && vectNumDados[0]==1)|| (vectNumDados[1]==vectNumDados[2] && vectNumDados[2]==1) || (vectNumDados[0]==vectNumDados[2] && vectNumDados[0]==1)){ /// DOS ASES
         trufasRonda = 0;
     } else if((vectNumDados[0]!=vectNumDados[1] && vectNumDados[1]!=vectNumDados[2] && vectNumDados[0]!=vectNumDados[2]) && (vectNumDados[0]==1 || vectNumDados[1]==1 || vectNumDados[2]==1)){ /// UN AS CARAS DISTINTAS
         trufasRonda = 0;
+    }
+}
+
+/// HUNDIR EN EL BARRO
+void ffHundir(bool turnoJugador, bool &hundirDosAses, bool &hundirTresAses, int &acuTrufas1, int &acuTrufas2, char jugador1[15], char jugador2[15]){
+    if(hundirTresAses){ /// SALIERON 3 ASES?
+        if(!turnoJugador){
+            acuTrufas2 += acuTrufas1; // TRUFAS DEL 1 AL 2
+            acuTrufas1 = 0;
+        } else{
+            acuTrufas1 += acuTrufas2; // TRUFAS DEL 2 AL 1
+            acuTrufas2 = 0;
+        }
+        fCartelHundido(true); // true = tres ases
+        hundirTresAses = false;
+    } else if(hundirDosAses){ /// SALIERON 2 ASES?
+        if(!turnoJugador){
+            acuTrufas1 = 0;
+        } else {
+            acuTrufas2 = 0;
+        }
+        fCartelHundido(false); // false = dos ases
+        hundirDosAses = false;
+    } else {
+        fPierdeTurno(turnoJugador, jugador1, jugador2);
     }
 }
 
@@ -330,25 +341,32 @@ void ffHundirDosAses(int vectNumDados[3], bool &hundirDosAses, bool &cerdoHundid
     }
 }
 
+
 /// HUNDE CON TRES ASES
-void ffHundirTresAses(int vectNumDados[3], bool &hundirTresAses){
-    if(vectNumDados[0] == 1 && vectNumDados[1] == 1 && vectNumDados[2]){
+void ffHundirTresAses(int vectNumDados[3], bool &hundirTresAses, bool &hundirDosAses){
+    if(vectNumDados[0] == 1 && vectNumDados[1] == 1 && vectNumDados[2] == 1){
         hundirTresAses = true;
     } else {
         hundirTresAses = false;
     }
+
+    if(((vectNumDados[0] == 1) && (vectNumDados[1] == 1)) || ((vectNumDados[1] == 1) && (vectNumDados[2] == 1)) || ((vectNumDados[0] == 1) && (vectNumDados[2] == 1))){
+        hundirDosAses = true;
+    } else {
+        hundirDosAses = false;
+    }
 }
 
 /// CORTA TURNO
-bool ffCorteTurno(int vectNumDados[3], bool &corteAs, bool cerdoHundido){
-    if(!cerdoHundido){
-        if(vectNumDados[0] == 1 || vectNumDados[1] == 1){
+bool ffCorteTurno(int vectNumDados[3], bool &corteAs, bool cerdoHundido, bool trufas50){
+    if(cerdoHundido || trufas50){
+        if(vectNumDados[0] == 1 || vectNumDados[1] == 1 || vectNumDados[2] == 1){
             corteAs = true;
         } else {
             corteAs = false;
         }
     } else {
-        if(vectNumDados[0] == 1 || vectNumDados[1] == 1 || vectNumDados[2] == 1){
+        if(vectNumDados[0] == 1 || vectNumDados[1] == 1){
             corteAs = true;
         } else {
             corteAs = false;

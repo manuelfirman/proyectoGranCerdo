@@ -51,8 +51,9 @@ void fBanner(){
 }
 
 /// FUNCION FIN DE JUEGO
-void ffFinJuego(int matrizTablaResultados[5][4], char jugador1[15], char jugador2[15], char ganador[15], bool tie, int maxPDV){
-    char oink[] = "OINK", inOink[4] = {};
+void fFinJuego(int matrizTablaResultados[5][4], char jugador1[15], char jugador2[15], char ganador[15], bool tie, int maxPDV){
+    char inOink[4] = {}, oink[] = "OINK";
+    bool salir = true;
     fBanner();
 
     posicionarXY(20, 6);
@@ -91,16 +92,23 @@ void ffFinJuego(int matrizTablaResultados[5][4], char jugador1[15], char jugador
     std::cout << "Ingrese Oink para continuar: ";
     std::cin.getline(inOink, 4, '\n');
     strupr(inOink);
-    while(strcmp(inOink, oink) != 0){
+    for(int j=0; j<4; j++){
+        if(inOink[j] != oink[j]){
+            salir = false;
+        }
+    }
+    while(!salir){
         inOink[4] = {};
-        std::cout<< "\n\n\t" << "Ingrese Oink para continuar: ";
+        std::cout << "Ingrese Oink para continuar: ";
         std::cin.getline(inOink, 4, '\n');
         strupr(inOink);
+        for(int j=0; j<4; j++){
+            if(inOink[j] != oink[j]){
+                salir = false;
+            }
+        }
     }
-    jugador1 = {};
-    jugador2 = {};
 }
-
 
 /// MUESTRA LOS NOMBRES DE LOS JUGADORES
 void fMostrarNombres(char jugador1[15], char jugador2[15]){
@@ -108,12 +116,12 @@ void fMostrarNombres(char jugador1[15], char jugador2[15]){
     //JUGADOR 2
     if(strlen(jugador1)>=9){
         posicionarXY(10,1);
-        std::cout << " " << jugador1 << " "; // Nombre corto
+        std::cout << " " << jugador1 << " "; // Nombre largo
     } else if(strlen(jugador1)>0){
         posicionarXY(10,1);
         std::cout << "          ";
         posicionarXY(10,1);
-        std::cout << "   " << jugador1 << "    "; // Nombre largo
+        std::cout << "   " << jugador1 << "    "; // Nombre corto
     } else {
         posicionarXY(10,1);
         std::cout << " Jugador 1 ";
@@ -121,12 +129,12 @@ void fMostrarNombres(char jugador1[15], char jugador2[15]){
     //JUGADOR 1
     if(strlen(jugador2)>=9){
         posicionarXY(99,1);
-        std::cout << " " << jugador2 << " "; // Nombre corto
+        std::cout << " " << jugador2 << " "; // Nombre largo
     } else if(strlen(jugador2)>0){
         posicionarXY(99,1);
         std::cout << "          ";
         posicionarXY(99,1);
-        std::cout << "   " << jugador2 << "    "; // Nombre largo
+        std::cout << "   " << jugador2 << "    "; // Nombre corto
     } else {
         posicionarXY(99,1);
         std::cout << " Jugador 2 ";
@@ -148,22 +156,17 @@ void ftablaRonda(bool turnoJugador, int trufasRonda, int i, char jugador1[15], c
     fondoBlanco();
     posicionarXY(49, 10);
     std::cout << "        RONDA #" << i+1 << "        ";
+    posicionarXY(49, 12);
+    std::cout << "    LANZAMIENTOS #" << contLanzamiento << "     ";
     posicionarXY(49, 13);
     std::cout << " TRUFAS DE LA RONDA: " << trufasRonda << "  ";
+    setConsolaOriginal();
     if(!turnoJugador){ // TURNO JUGADOR 1
-        setConsolaOriginal();
         posicionarXY(49, 11);
         std::cout << "    TURNO DE " << jugador1;
-        fondoBlanco();
-        posicionarXY(49, 12);
-        std::cout << "    LANZAMIENTOS #" << contLanzamiento << "     ";
     } else {           // TURNO JUGADOR 2
-        setConsolaOriginal();
         posicionarXY(49, 11);
         std::cout << "    TURNO DE " << jugador2;
-        fondoBlanco();
-        posicionarXY(49, 12);
-        std::cout << "    LANZAMIENTOS #" << contLanzamiento << "     ";
     }
     fondoRosado();
     posicionarXY(47,9);
@@ -260,21 +263,21 @@ void fprintDados(int inDado, int posX, int posY){
 }
 
 /// ANIMACION DE DADOS
-void fAnimacion(int cerdoHundido){
+void fAnimacion(bool cerdoHundido, bool trufas50){
     posicionarXY(57, 17);
     std::cout << "TIRANDO...";
-    if(!cerdoHundido){
-        for(int i=6; i>=0; i--){
-            Sleep(300);
+    if(cerdoHundido || trufas50){
+        for(int i=1; i<4; i++){
+            Sleep(400);
+            fprintDados(i, 48, 20);
+            fprintDados(i, 58, 20);
+            fprintDados(i, 68, 20);
+        }
+    } else{
+        for(int i=1; i<4; i++){
+            Sleep(400);
             fprintDados(i, 52, 20);
             fprintDados(i, 63, 20);
-        }
-    } else {
-        for(int i=6; i>0; i--){
-            Sleep(300);
-            fprintDados(1+i, 48, 20);
-            fprintDados(1+i, 58, 20);
-            fprintDados(1+i, 68, 20);
         }
     }
     posicionarXY(57, 17);
@@ -328,7 +331,7 @@ void fMenuGranCerdo(){
 
 
 /// CERDO HUNDIDO
-void fHundirEnElBarro(bool dados){
+void fCartelHundido(bool dados){
     fondoBlanco();
     if(dados){
         posicionarXY(46, 26);

@@ -55,10 +55,8 @@ int main()
                     case 3:
                         gameOver = true;
                     break;
-
                 }
-            break;
-        }
+            }
     } while(!gameOver);
 
     return 0;
