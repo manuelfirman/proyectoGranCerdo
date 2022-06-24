@@ -45,12 +45,12 @@ void fGame(int &record, char mejorPuntaje[15]){
 
     limpiarConsola();
     fPedirNombres(jugador1, jugador2);      // PEDIR NOMBRES
-    fInstructivo();
+    fInstructivo();                         // INSTRUCCIONES
     fBanner();                              // MOSTRAR INTERFAZ
     fMostrarNombres(jugador1, jugador2);    // MOSTRAR NOMBRES
     fMostrarTrufas(acuTrufas1, acuTrufas2); // MOSTRAR TRUFAS
 
-    for(i=0; i<1; i++){
+    for(i=0; i<5; i++){
         limpiarConsola();
         cambioRonda = false;
 
@@ -64,7 +64,7 @@ void fGame(int &record, char mejorPuntaje[15]){
             if(lanzar == 'S'){                 /// LANZAR
                 contLanzamiento++;
                 vectNumDados[3] = ffNumeroRandom(vectNumDados); /// ASIGNA NUMERO A LOS DADOS
-//                ffTest(lanzar, vectNumDados);
+                ffTest(lanzar, vectNumDados);
                 fAnimacion(cerdoHundido, trufas50);
 
                 if(cerdoHundido || trufas50){ /// CON CUANTOS DADOS JUEGO?
@@ -78,7 +78,7 @@ void fGame(int &record, char mejorPuntaje[15]){
                 }
 
                 ffContadorOinks(turnoJugador, relanzamiento, contOink1, contOink2);     /// CUENTA OINKS
-                ffCorteTurno(vectNumDados, corteAs, cerdoHundido, trufas50);                      /// CORTA TURNO
+                ffCorteTurno(vectNumDados, corteAs, cerdoHundido, trufas50);            /// CORTA TURNO
 
                 if(corteAs){        /// SALIO UN AS?
                     if(!turnoJugador){ /// PIERDE EL TURNO EL JUGADOR 1?
@@ -132,12 +132,12 @@ void fGame(int &record, char mejorPuntaje[15]){
             ffTrufas50(acuTrufas1, acuTrufas2, trufas50);
         }
 
-        posicionarXY(55,4);
+        posicionarXY(52,4);
         std::cout << "RONDA #" << i+1 << " FINALIZADA";
-        Sleep(1500);
+        Sleep(1000);
     }
     limpiarConsola();
-    posicionarXY(50, 30);
+    posicionarXY(50, 15);
     std::cout << "GAME OVER";
     cualquierTecla();
     limpiarConsola();
@@ -155,128 +155,49 @@ void fGame(int &record, char mejorPuntaje[15]){
             mejorPuntaje[j] = ganador[j];
         }
     }
+    limpiarConsola();
 }
 
+/// ----------------------------------------------------------------------------------------------------------------------
 
-/// TEST
-void ffTest(char lanzar, int vectNumDados[]){
-lanzar = rlutil::getkey();
-    if (lanzar == 'T'){
-        vectNumDados[0] = 1;
-        vectNumDados[1] = 1;
-        vectNumDados[2] = 1;
-    } else if(lanzar == 'D'){
-        vectNumDados[0] = 1;
-        vectNumDados[1] = 2;
-        vectNumDados[2] = 1;
-    } else if(lanzar == 'F'){
-        vectNumDados[0] = 1;
-        vectNumDados[1] = 1;
-        vectNumDados[2] = 2;
-    } else if(lanzar == 'G'){
-        vectNumDados[0] = 2;
-        vectNumDados[1] = 1;
-        vectNumDados[2] = 1;
-    } else if(lanzar == 'Z'){
-        vectNumDados[0] = 2;
-        vectNumDados[1] = 3;
-        vectNumDados[2] = 2;
-    }
-}
+/// LANZAMIENTO
+char ffSoN(bool &relanzamiento){
+    char lanzar;
+    if(!relanzamiento){
+        fondoBlanco();
+        posicionarXY(7, 21);
+        std::cout << "LANZAR? (S/N)";
+        // LANZAR
+        lanzar = rlutil::getkey();
+        if(lanzar == 's' || lanzar == 'n'){
+            lanzar -= 32;
+        }
+        setConsolaOriginal();
+        posicionarXY(7, 21);
+        std::cout << "             ";
 
-/// PRIMER FILA DE LA TABLA
-void ffTablaFilaUno(int matrizTablaResultados[5][4], int acuTrufas1, int acuTrufas2, int &masTrufas, char jugador1[15], char jugador2[15], char ganador[15]){
-    matrizTablaResultados[0][1] = acuTrufas1; // TRUFAS ACUMULADAS A MATRIZ
-    matrizTablaResultados[0][3] = acuTrufas2;
-    if(acuTrufas1 > acuTrufas2){
-        masTrufas = acuTrufas1;
-        matrizTablaResultados[0][0] = 5; // PDV A MATRIZ
-        matrizTablaResultados[0][2] = 0;
-    } else if(acuTrufas1 < acuTrufas2) {
-        masTrufas = acuTrufas2;
-        matrizTablaResultados[0][2] = 5; // PDV A MATRIZ
-        matrizTablaResultados[0][0] = 0;
     } else {
-        masTrufas = acuTrufas1;
-        matrizTablaResultados[0][0] = 5; // PDV A MATRIZ
-        matrizTablaResultados[0][2] = 5;
+        fondoBlanco();
+        posicionarXY(2, 29);
+        std::cout << "TENES QUE VOLVER A LANZAR (S)";
+        rlutil::anykey();
+        lanzar = 'S';
+        relanzamiento = false;
+        posicionarXY(2, 29);
+        std::cout << "                             ";
     }
+    setConsolaOriginal();
+    return lanzar;
 }
 
-/// SEGUNDA FILA DE LA TABLA
-void ffTablaFilaDos(int matrizTablaResultados[5][4], int acuTrufas1, int acuTrufas2){
-    matrizTablaResultados[1][0] = acuTrufas1 / 50; // JUGADOR 1
-    matrizTablaResultados[1][1] = matrizTablaResultados[1][0] * 50;
-
-    matrizTablaResultados[1][2] = acuTrufas2 / 50; // JUGADOR 2
-    matrizTablaResultados[1][3] = matrizTablaResultados[1][2] * 50;
-}
-/// TERCERA FILA DE LA TABLA
-void ffTablaFilaTres(int matrizTablaResultados[5][4], int contOink1, int contOink2){
-    matrizTablaResultados[2][0] = contOink1 * 2; // JUGADOR 1
-    matrizTablaResultados[2][1] = contOink1;
-    matrizTablaResultados[2][2] = contOink2 * 2; // JUGADOR 2
-    matrizTablaResultados[2][3] = contOink2;
-}
-/// CUARTA FILA DE LA TABLA
-void ffTablaFilaCuatro(int matrizTablaResultados[5][4], int maxLanzamientos1, int maxLanzamientos2){
-    matrizTablaResultados[3][1] = maxLanzamientos1; // LANZAMIENTOS A MATRIZ
-    matrizTablaResultados[3][3] = maxLanzamientos2;
-    if(maxLanzamientos1 > maxLanzamientos2){
-        matrizTablaResultados[3][0] = 3;
-        matrizTablaResultados[3][2] = 0;
-    } else if(maxLanzamientos1 < maxLanzamientos2){
-        matrizTablaResultados[3][0] = 0;
-        matrizTablaResultados[3][2] = 3;
-    } else {
-        matrizTablaResultados[3][0] = 3;
-        matrizTablaResultados[3][2] = 3;
+/// DA UN NUMERO RANDOM
+int ffNumeroRandom(int vectNumDados[3]){
+    srand(time(NULL));
+    for(int i=0; i<3; i++){
+        vectNumDados[i] = rand() % 6 + 1;
     }
-}
-
-/// TOTAL TABLA
-void ffTotal(int matrizTablaResultados[5][4], int &maxPDV, bool &tie, char jugador1[15], char jugador2[15], char ganador[15]){
-    for(int j=0; j<4; j++){
-            matrizTablaResultados[4][0] += matrizTablaResultados[j][0];
-            matrizTablaResultados[4][2] += matrizTablaResultados[j][2];
-        }
-        if(matrizTablaResultados[4][0] > matrizTablaResultados[4][2]){
-            for(int j=0; j<15; j++){
-                ganador[j] = jugador1[j];
-            }
-            maxPDV = matrizTablaResultados[4][0];
-        } else if(matrizTablaResultados[4][0] < matrizTablaResultados[4][2]) {
-            for(int j=0; j<15; j++){
-                ganador[j] = jugador2[j];
-            }
-            maxPDV = matrizTablaResultados[4][2];
-        } else {
-            tie = true;
-            maxPDV = matrizTablaResultados[4][0];
-        }
-}
-
-void ffContMaxLanz(int contLanzamiento, int &maxLanzamientos){
-    if(contLanzamiento > maxLanzamientos){
-        maxLanzamientos = contLanzamiento;
-    }
-}
-
-void ffTrufas50(int acuTrufas1, int acuTrufas2, bool &trufas50){
-    if(acuTrufas1 > 49 && acuTrufas2 > 49){
-        trufas50 = true;
-    }
-}
-
-/// CONTADOR
-void ffContadorOinks(bool turnoJugador, bool relanzamiento, int &contOink1, int &contOink2){
-    if(relanzamiento){
-        if(!turnoJugador){
-            contOink1++;
-        } else {
-            contOink2++;
-        }
-    }
+    return vectNumDados[3];
+    system("PAUSE");
 }
 
 /// CALCULA LOS PUNTOS DE A DOS DADOS
@@ -313,6 +234,31 @@ void ffCalculoTresDados(int &trufasRonda, int vectNumDados[3], bool &relanzamien
     }
 }
 
+/// HUNDE CON DOS ASES
+void ffHundirDosAses(int vectNumDados[3], bool &hundirDosAses, bool &cerdoHundido){
+    if(vectNumDados[0] == 1 && vectNumDados[1] == 1){
+        cerdoHundido = true;
+        hundirDosAses = true;
+    } else {
+        hundirDosAses = false;
+    }
+}
+
+/// HUNDE CON TRES ASES
+void ffHundirTresAses(int vectNumDados[3], bool &hundirTresAses, bool &hundirDosAses){
+    if(vectNumDados[0] == 1 && vectNumDados[1] == 1 && vectNumDados[2] == 1){
+        hundirTresAses = true;
+    } else {
+        hundirTresAses = false;
+    }
+
+    if(((vectNumDados[0] == 1) && (vectNumDados[1] == 1)) || ((vectNumDados[1] == 1) && (vectNumDados[2] == 1)) || ((vectNumDados[0] == 1) && (vectNumDados[2] == 1))){
+        hundirDosAses = true;
+    } else {
+        hundirDosAses = false;
+    }
+}
+
 /// HUNDIR EN EL BARRO
 void ffHundir(bool turnoJugador, bool &hundirDosAses, bool &hundirTresAses, int &acuTrufas1, int &acuTrufas2, char jugador1[15], char jugador2[15]){
     if(hundirTresAses){ /// SALIERON 3 ASES?
@@ -338,29 +284,14 @@ void ffHundir(bool turnoJugador, bool &hundirDosAses, bool &hundirTresAses, int 
     }
 }
 
-/// HUNDE CON DOS ASES
-void ffHundirDosAses(int vectNumDados[3], bool &hundirDosAses, bool &cerdoHundido){
-    if(vectNumDados[0] == 1 && vectNumDados[1] == 1){
-        cerdoHundido = true;
-        hundirDosAses = true;
-    } else {
-        hundirDosAses = false;
-    }
-}
-
-
-/// HUNDE CON TRES ASES
-void ffHundirTresAses(int vectNumDados[3], bool &hundirTresAses, bool &hundirDosAses){
-    if(vectNumDados[0] == 1 && vectNumDados[1] == 1 && vectNumDados[2] == 1){
-        hundirTresAses = true;
-    } else {
-        hundirTresAses = false;
-    }
-
-    if(((vectNumDados[0] == 1) && (vectNumDados[1] == 1)) || ((vectNumDados[1] == 1) && (vectNumDados[2] == 1)) || ((vectNumDados[0] == 1) && (vectNumDados[2] == 1))){
-        hundirDosAses = true;
-    } else {
-        hundirDosAses = false;
+/// CONTADOR OINKS
+void ffContadorOinks(bool turnoJugador, bool relanzamiento, int &contOink1, int &contOink2){
+    if(relanzamiento){
+        if(!turnoJugador){
+            contOink1++;
+        } else {
+            contOink2++;
+        }
     }
 }
 
@@ -382,34 +313,11 @@ bool ffCorteTurno(int vectNumDados[3], bool &corteAs, bool cerdoHundido, bool tr
     return corteAs;
 }
 
-/// LANZAMIENTO
-char ffSoN(bool &relanzamiento){
-    char lanzar;
-    if(!relanzamiento){
-        fondoBlanco();
-        posicionarXY(7, 21);
-        std::cout << "LANZAR? (S/N)";
-        // LANZAR
-        lanzar = rlutil::getkey();
-        if(lanzar == 's' || lanzar == 'n'){
-            lanzar -= 32;
-        }
-        setConsolaOriginal();
-        posicionarXY(7, 21);
-        std::cout << "             ";
-
-    } else {
-        // PEDIR LANZAMIENTO
-        fondoBlanco();
-        posicionarXY(2, 29);
-        std::cout << "TENES QUE VOLVER A LANZAR (S)";
-        rlutil::anykey();
-        // LANZAR
-        lanzar = 'S';
-        relanzamiento = false;
+/// MAXIMOS LANZAMIENTOS
+void ffContMaxLanz(int contLanzamiento, int &maxLanzamientos){
+    if(contLanzamiento > maxLanzamientos){
+        maxLanzamientos = contLanzamiento;
     }
-    setConsolaOriginal();
-    return lanzar;
 }
 
 /// CAMBIO DE TURNO
@@ -421,14 +329,105 @@ void ffCambioTurno(bool &turnoJugador){
     }
 }
 
-/// DA UN NUMERO RANDOM
-int ffNumeroRandom(int vectNumDados[3]){
-    srand(time(NULL));
-    for(int i=0; i<3; i++){
-        vectNumDados[i] = rand() % 6 + 1;
+/// ACUMULADORES EN 50
+void ffTrufas50(int acuTrufas1, int acuTrufas2, bool &trufas50){
+    if(acuTrufas1 > 49 && acuTrufas2 > 49){
+        trufas50 = true;
     }
-    return vectNumDados[3];
-    system("PAUSE");
 }
 
+/// PRIMER FILA DE LA TABLA
+void ffTablaFilaUno(int matrizTablaResultados[5][4], int acuTrufas1, int acuTrufas2, int &masTrufas, char jugador1[15], char jugador2[15], char ganador[15]){
+    matrizTablaResultados[0][1] = acuTrufas1; // TRUFAS ACUMULADAS A MATRIZ
+    matrizTablaResultados[0][3] = acuTrufas2;
+    if(acuTrufas1 > acuTrufas2){
+        masTrufas = acuTrufas1;
+        matrizTablaResultados[0][0] = 5; // PDV A MATRIZ
+        matrizTablaResultados[0][2] = 0;
+    } else if(acuTrufas1 < acuTrufas2) {
+        masTrufas = acuTrufas2;
+        matrizTablaResultados[0][2] = 5; // PDV A MATRIZ
+        matrizTablaResultados[0][0] = 0;
+    } else {
+        masTrufas = acuTrufas1;
+        matrizTablaResultados[0][0] = 5; // PDV A MATRIZ
+        matrizTablaResultados[0][2] = 5;
+    }
+}
+/// SEGUNDA FILA DE LA TABLA
+void ffTablaFilaDos(int matrizTablaResultados[5][4], int acuTrufas1, int acuTrufas2){
+    matrizTablaResultados[1][0] = acuTrufas1 / 50; // JUGADOR 1
+    matrizTablaResultados[1][1] = matrizTablaResultados[1][0] * 50;
 
+    matrizTablaResultados[1][2] = acuTrufas2 / 50; // JUGADOR 2
+    matrizTablaResultados[1][3] = matrizTablaResultados[1][2] * 50;
+}
+/// TERCERA FILA DE LA TABLA
+void ffTablaFilaTres(int matrizTablaResultados[5][4], int contOink1, int contOink2){
+    matrizTablaResultados[2][0] = contOink1 * 2; // JUGADOR 1
+    matrizTablaResultados[2][1] = contOink1;
+    matrizTablaResultados[2][2] = contOink2 * 2; // JUGADOR 2
+    matrizTablaResultados[2][3] = contOink2;
+}
+/// CUARTA FILA DE LA TABLA
+void ffTablaFilaCuatro(int matrizTablaResultados[5][4], int maxLanzamientos1, int maxLanzamientos2){
+    matrizTablaResultados[3][1] = maxLanzamientos1; // LANZAMIENTOS A MATRIZ
+    matrizTablaResultados[3][3] = maxLanzamientos2;
+    if(maxLanzamientos1 > maxLanzamientos2){
+        matrizTablaResultados[3][0] = 3;
+        matrizTablaResultados[3][2] = 0;
+    } else if(maxLanzamientos1 < maxLanzamientos2){
+        matrizTablaResultados[3][0] = 0;
+        matrizTablaResultados[3][2] = 3;
+    } else {
+        matrizTablaResultados[3][0] = 3;
+        matrizTablaResultados[3][2] = 3;
+    }
+}
+/// TOTAL TABLA
+void ffTotal(int matrizTablaResultados[5][4], int &maxPDV, bool &tie, char jugador1[15], char jugador2[15], char ganador[15]){
+    for(int j=0; j<4; j++){
+            matrizTablaResultados[4][0] += matrizTablaResultados[j][0];
+            matrizTablaResultados[4][2] += matrizTablaResultados[j][2];
+        }
+        if(matrizTablaResultados[4][0] > matrizTablaResultados[4][2]){
+            for(int j=0; j<15; j++){
+                ganador[j] = jugador1[j];
+            }
+            maxPDV = matrizTablaResultados[4][0];
+        } else if(matrizTablaResultados[4][0] < matrizTablaResultados[4][2]) {
+            for(int j=0; j<15; j++){
+                ganador[j] = jugador2[j];
+            }
+            maxPDV = matrizTablaResultados[4][2];
+        } else {
+            tie = true;
+            maxPDV = matrizTablaResultados[4][0];
+        }
+}
+
+/// TEST
+void ffTest(char lanzar, int vectNumDados[]){
+lanzar = rlutil::getkey();
+    if (lanzar == 'T'){
+        vectNumDados[0] = 1;
+        vectNumDados[1] = 1;
+        vectNumDados[2] = 1;
+    } else if(lanzar == 'D'){
+        vectNumDados[0] = 1;
+        vectNumDados[1] = 2;
+        vectNumDados[2] = 1;
+    } else if(lanzar == 'F'){
+        vectNumDados[0] = 1;
+        vectNumDados[1] = 1;
+        vectNumDados[2] = 2;
+    } else if(lanzar == 'G'){
+        vectNumDados[0] = 2;
+        vectNumDados[1] = 1;
+        vectNumDados[2] = 1;
+    } else if(lanzar == 'Z'){
+        vectNumDados[0] = 2;
+        vectNumDados[1] = 3;
+        vectNumDados[2] = 2;
+    }
+}

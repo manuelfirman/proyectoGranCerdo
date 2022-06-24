@@ -1,7 +1,7 @@
-#include <iostream>
-#include <stdlib.h>
-#include <windows.h>
-#include <time.h>
+#include <iostream>     // cin cout
+#include <stdlib.h>     // srand rand
+#include <windows.h>    // sleep
+#include <time.h>       // num random
 #include "rlutil.h"
 #include "interfaz.h"
 #include "game.h"
@@ -17,11 +17,10 @@ int main()
     rlutil::hidecursor(); // ocultar cursor consola
 
     do{
-        fondoRosado();
         fStartGranCerdo();
         fMenuGranCerdo();
         posicionarXY(45, 20 + yCursor);
-        std::cout << (char)62 << std::endl;
+        std::cout << (char)62 << std::endl; // imprimir cursor
 
         int key = rlutil::getkey(); // obtener tecla de ingreso
 
@@ -46,7 +45,6 @@ int main()
                 switch(yCursor){
                     case 0:
                         fGame(record, mejorPuntaje);
-                        limpiarConsola();
                     break;
                     case 1:
                         fEstadisticas(record, mejorPuntaje);
