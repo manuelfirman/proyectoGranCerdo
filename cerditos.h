@@ -32,6 +32,8 @@ void fEstadisticas(int record, char mejorPuntaje[15]){
     limpiarConsola();
 }
 
+///HOLA
+
 /// CREDITOS CREADORES
 void fCerditos(){
     limpiarConsola();

@@ -406,6 +406,8 @@ void ffTotal(int matrizTablaResultados[5][4], int &maxPDV, bool &tie, char jugad
         }
 }
 
+///HOLA
+
 /// TEST
 void ffTest(char lanzar, int vectNumDados[]){
 lanzar = rlutil::getkey();

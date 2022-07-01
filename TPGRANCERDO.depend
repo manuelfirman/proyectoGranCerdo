@@ -30,3 +30,34 @@
 
 1656043856 c:\users\bezpa\desktop\tp defi\tpgrancerdo\cerditos.h
 
+1656649766 source:d:\documentos\programacion\utn\proyectos\proyectograncerdo\main.cpp
+	<iostream>
+	<stdlib.h>
+	<windows.h>
+	<time.h>
+	"rlutil.h"
+	"interfaz.h"
+	"game.h"
+	"cerditos.h"
+
+1656649695 d:\documentos\programacion\utn\proyectos\proyectograncerdo\rlutil.h
+	<iostream>
+	<string>
+	<cstdio>
+	<stdio.h>
+	<string.h>
+	<windows.h>
+	<conio.h>
+	<termios.h>
+	<unistd.h>
+	<sys/ioctl.h>
+	<sys/types.h>
+	<sys/time.h>
+
+1656649766 d:\documentos\programacion\utn\proyectos\proyectograncerdo\interfaz.h
+	<stdio.h>
+
+1656649766 d:\documentos\programacion\utn\proyectos\proyectograncerdo\game.h
+
+1656649766 d:\documentos\programacion\utn\proyectos\proyectograncerdo\cerditos.h
+

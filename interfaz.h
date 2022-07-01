@@ -119,6 +119,8 @@ void fMostrarTrufas(int trufas1, int trufas2){
 
 }
 
+///HOLA
+
 /// FUNCION TABLA RONDA
 void ftablaRonda(bool turnoJugador, int trufasRonda, int i, char jugador1[15], char jugador2[15], int contLanzamiento){
     fondoBlanco();
